@@ -1,4 +1,8 @@
+import os
+
+import pandas as pd
 import streamlit as st
+
 from database import add_problem
 
 st.set_page_config(
@@ -8,67 +12,59 @@ st.set_page_config(
 
 st.title("📥 Import Problem Packs")
 
-requests_problems = [
-    {
-        "title": "GET Request Basics",
-        "topic": "Requests",
-        "difficulty": "Easy",
-        "description": """
-Send a GET request to
+PACKS_FOLDER = "problem_packs"
 
-https://jsonplaceholder.typicode.com/users
+# Check folder exists
+if not os.path.exists(PACKS_FOLDER):
+    st.error("problem_packs folder not found.")
+    st.stop()
 
-Print the JSON response.
-""",
-        "starter_code": """import requests
-
-# Write your code here
-""",
-        "solution": """import requests
-
-response = requests.get(
-    "https://jsonplaceholder.typicode.com/users"
+# Find all CSV files
+csv_files = sorted(
+    [f for f in os.listdir(PACKS_FOLDER) if f.endswith(".csv")]
 )
 
-print(response.json())
-""",
-        "hint": "Use requests.get()."
-    },
+if not csv_files:
+    st.warning("No CSV files found inside problem_packs.")
+    st.stop()
 
-    {
-        "title": "Response Status Code",
-        "topic": "Requests",
-        "difficulty": "Easy",
-        "description": """
-Print only the HTTP status code of a GET request.
-""",
-        "starter_code": """import requests
-""",
-        "solution": """import requests
-
-response = requests.get(
-    "https://jsonplaceholder.typicode.com/users"
+selected_pack = st.selectbox(
+    "Choose a problem pack",
+    csv_files
 )
 
-print(response.status_code)
-""",
-        "hint": "Look at response.status_code."
-    }
-]
+file_path = os.path.join(PACKS_FOLDER, selected_pack)
 
-if st.button("📥 Import Requests Problems"):
+try:
+    df = pd.read_csv(file_path)
 
-    for problem in requests_problems:
+    st.success(f"{len(df)} problems found.")
+
+    st.dataframe(
+        df[["title", "topic", "difficulty"]],
+        use_container_width=True
+    )
+
+except Exception as e:
+    st.error(f"Unable to read CSV.\n\n{e}")
+    st.stop()
+
+if st.button("📥 Import Selected Pack"):
+
+    imported = 0
+
+    for _, row in df.iterrows():
 
         add_problem(
-            problem["title"],
-            problem["topic"],
-            problem["difficulty"],
-            problem["description"],
-            problem["starter_code"],
-            problem["solution"],
-            problem["hint"]
+            row["title"],
+            row["topic"],
+            row["difficulty"],
+            row["description"],
+            row["starter_code"],
+            row["solution"],
+            row["hint"]
         )
 
-    st.success(f"{len(requests_problems)} problems imported!")
+        imported += 1
 
+    st.success(f"Imported {imported} problems from {selected_pack}")
