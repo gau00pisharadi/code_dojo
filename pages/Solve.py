@@ -1,4 +1,5 @@
 import streamlit as st
+from code_editor import code_editor
 
 from database import (
     get_problem,
@@ -52,11 +53,14 @@ st.divider()
 
 st.subheader("Your Solution")
 
-user_code = st.text_area(
-    "",
-    value=problem["starter_code"],
-    height=350
+response = code_editor(
+    problem["starter_code"],
+    lang="python",
+    theme="default",
+    height=[20, 350],
 )
+
+user_code = response.get("text", ""))
 
 c1, c2, c3 = st.columns(3)
 
