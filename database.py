@@ -178,22 +178,14 @@ def get_counts():
 
     return total, easy, medium, hard
     
+import ast
+
 def normalize_code(code):
     """
-    Remove comments, blank lines and extra spaces
-    before comparing code.
+    Compare code by its Abstract Syntax Tree (AST),
+    ignoring formatting differences.
     """
-
-    lines = []
-
-    for line in code.splitlines():
-
-        # Remove inline comments
-        line = re.sub(r"#.*", "", line)
-
-        line = line.strip()
-
-        if line:
-            lines.append(line)
-
-    return "\n".join(lines)
+    try:
+        return ast.dump(ast.parse(code))
+    except SyntaxError:
+        return None
