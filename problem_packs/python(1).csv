@@ -1,0 +1,51 @@
+title,topic,difficulty,description,starter_code,solution,hint
+Variables and Printing,Python,Easy,Complete the Python exercise: Variables and Printing.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Input and Output,Python,Easy,Complete the Python exercise: Input and Output.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Arithmetic Operators,Python,Easy,Complete the Python exercise: Arithmetic Operators.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+String Concatenation,Python,Easy,Complete the Python exercise: String Concatenation.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+String Formatting,Python,Easy,Complete the Python exercise: String Formatting.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Lists Basics,Python,Easy,Complete the Python exercise: Lists Basics.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+List Indexing,Python,Easy,Complete the Python exercise: List Indexing.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+List Slicing,Python,Easy,Complete the Python exercise: List Slicing.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Tuples,Python,Easy,Complete the Python exercise: Tuples.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Sets,Python,Easy,Complete the Python exercise: Sets.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Dictionaries,Python,Easy,Complete the Python exercise: Dictionaries.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+If Statements,Python,Easy,Complete the Python exercise: If Statements.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Nested If,Python,Easy,Complete the Python exercise: Nested If.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+For Loops,Python,Easy,Complete the Python exercise: For Loops.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+While Loops,Python,Easy,Complete the Python exercise: While Loops.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Break and Continue,Python,Medium,Complete the Python exercise: Break and Continue.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Functions,Python,Medium,Complete the Python exercise: Functions.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Default Arguments,Python,Medium,Complete the Python exercise: Default Arguments.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Keyword Arguments,Python,Medium,Complete the Python exercise: Keyword Arguments.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Lambda Functions,Python,Medium,Complete the Python exercise: Lambda Functions.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+List Comprehensions,Python,Medium,Complete the Python exercise: List Comprehensions.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Dictionary Comprehensions,Python,Medium,Complete the Python exercise: Dictionary Comprehensions.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Exception Handling,Python,Medium,Complete the Python exercise: Exception Handling.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Reading Files,Python,Medium,Complete the Python exercise: Reading Files.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Writing Files,Python,Medium,Complete the Python exercise: Writing Files.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Pathlib Basics,Python,Medium,Complete the Python exercise: Pathlib Basics.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Modules,Python,Medium,Complete the Python exercise: Modules.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Random Module,Python,Medium,Complete the Python exercise: Random Module.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Datetime Module,Python,Medium,Complete the Python exercise: Datetime Module.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Enumerate,Python,Medium,Complete the Python exercise: Enumerate.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Zip,Python,Medium,Complete the Python exercise: Zip.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Sorting Lists,Python,Medium,Complete the Python exercise: Sorting Lists.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Custom Sort Key,Python,Medium,Complete the Python exercise: Custom Sort Key.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Generators,Python,Medium,Complete the Python exercise: Generators.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Iterators,Python,Medium,Complete the Python exercise: Iterators.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Classes,Python,Hard,Complete the Python exercise: Classes.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Inheritance,Python,Hard,Complete the Python exercise: Inheritance.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Magic Methods,Python,Hard,Complete the Python exercise: Magic Methods.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Decorators,Python,Hard,Complete the Python exercise: Decorators.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Context Managers,Python,Hard,Complete the Python exercise: Context Managers.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Regular Expressions,Python,Hard,Complete the Python exercise: Regular Expressions.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+JSON,Python,Hard,Complete the Python exercise: JSON.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+CSV Handling,Python,Hard,Complete the Python exercise: CSV Handling.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Collections Counter,Python,Hard,Complete the Python exercise: Collections Counter.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+NamedTuple,Python,Hard,Complete the Python exercise: NamedTuple.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Dataclasses,Python,Hard,Complete the Python exercise: Dataclasses.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Type Hints,Python,Hard,Complete the Python exercise: Type Hints.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Recursion,Python,Hard,Complete the Python exercise: Recursion.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Memoization,Python,Hard,Complete the Python exercise: Memoization.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
+Mini Project,Python,Hard,Complete the Python exercise: Mini Project.,# Write your code here,# Official solution placeholder,Break the problem into smaller steps.
