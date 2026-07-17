@@ -1,3 +1,4 @@
+import re
 import sqlite3
 
 DB_NAME = "data.db"
@@ -176,3 +177,23 @@ def get_counts():
     conn.close()
 
     return total, easy, medium, hard
+    
+def normalize_code(code):
+    """
+    Remove comments, blank lines and extra spaces
+    before comparing code.
+    """
+
+    lines = []
+
+    for line in code.splitlines():
+
+        # Remove inline comments
+        line = re.sub(r"#.*", "", line)
+
+        line = line.strip()
+
+        if line:
+            lines.append(line)
+
+    return "\n".join(lines)
