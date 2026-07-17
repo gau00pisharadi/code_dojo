@@ -91,6 +91,6 @@ if submitted:
          solution,
          hint
         )
-        st.success("Problem added successfully!")
+        st.success("Problem updated successfully!")
 
         st.balloons()
