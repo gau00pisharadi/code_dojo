@@ -55,3 +55,20 @@ print(response.status_code)
         "hint": "Look at response.status_code."
     }
 ]
+
+if st.button("📥 Import Requests Problems"):
+
+    for problem in requests_problems:
+
+        add_problem(
+            problem["title"],
+            problem["topic"],
+            problem["difficulty"],
+            problem["description"],
+            problem["starter_code"],
+            problem["solution"],
+            problem["hint"]
+        )
+
+    st.success(f"{len(requests_problems)} problems imported!")
+
