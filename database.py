@@ -1,5 +1,5 @@
-import re
 import sqlite3
+import ast
 
 DB_NAME = "data.db"
 
@@ -53,7 +53,7 @@ def add_problem(
             solution,
             hint
         )
-        VALUES (?,?,?,?,?,?,?)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
         """,
         (
             title,
@@ -70,8 +70,61 @@ def add_problem(
     conn.close()
 
 
-def get_all_problems():
+def update_problem(
+    problem_id,
+    title,
+    topic,
+    difficulty,
+    description,
+    starter_code,
+    solution,
+    hint,
+):
+    conn = get_connection()
+    cur = conn.cursor()
 
+    cur.execute(
+        """
+        UPDATE problems
+        SET
+            title=?,
+            topic=?,
+            difficulty=?,
+            description=?,
+            starter_code=?,
+            solution=?,
+            hint=?
+        WHERE id=?
+        """,
+        (
+            title,
+            topic,
+            difficulty,
+            description,
+            starter_code,
+            solution,
+            hint,
+            problem_id,
+        ),
+    )
+
+    conn.commit()
+    conn.close()
+
+
+def delete_problem(problem_id):
+    conn = get_connection()
+
+    conn.execute(
+        "DELETE FROM problems WHERE id=?",
+        (problem_id,),
+    )
+
+    conn.commit()
+    conn.close()
+
+
+def get_all_problems():
     conn = get_connection()
     conn.row_factory = sqlite3.Row
 
@@ -89,7 +142,6 @@ def get_all_problems():
 
 
 def get_problem(problem_id):
-
     conn = get_connection()
     conn.row_factory = sqlite3.Row
 
@@ -108,7 +160,6 @@ def get_problem(problem_id):
 
 
 def search_problems(search_text="", topic="All", difficulty="All"):
-
     conn = get_connection()
     conn.row_factory = sqlite3.Row
 
@@ -138,7 +189,6 @@ def search_problems(search_text="", topic="All", difficulty="All"):
 
 
 def get_topics():
-
     conn = get_connection()
 
     rows = conn.execute(
@@ -151,11 +201,10 @@ def get_topics():
 
     conn.close()
 
-    return [x[0] for x in rows]
+    return [row[0] for row in rows]
 
 
 def get_counts():
-
     conn = get_connection()
 
     total = conn.execute(
@@ -177,27 +226,14 @@ def get_counts():
     conn.close()
 
     return total, easy, medium, hard
-    
-import ast
+
 
 def normalize_code(code):
     """
-    Compare code by its Abstract Syntax Tree (AST),
-    ignoring formatting differences.
+    Compare code using Python's AST so formatting differences
+    (spacing, blank lines, etc.) are ignored.
     """
     try:
         return ast.dump(ast.parse(code))
     except SyntaxError:
         return None
-
-def delete_problem(problem_id):
-
-    conn = get_connection()
-
-    conn.execute(
-        "DELETE FROM problems WHERE id=?",
-        (problem_id,)
-    )
-
-    conn.commit()
-    conn.close()
