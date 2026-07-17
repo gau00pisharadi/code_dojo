@@ -17,31 +17,28 @@ st.title("💻 Solve Problem")
 # -----------------------------
 
 if "problem_id" not in st.session_state:
-
     st.warning("Please select a problem from Browse Problems.")
-
     st.stop()
 
 # -----------------------------
 
-problem = get_problem(
-    st.session_state.problem_id
-)
+problem = get_problem(st.session_state.problem_id)
 
 if problem is None:
-
     st.error("Problem not found.")
-
     st.stop()
 
 # -----------------------------
 
 st.header(problem["title"])
 
-c1, c2 = st.columns(2)
+col1, col2 = st.columns(2)
 
-c1.write(f"**Topic:** {problem['topic']}")
-c2.write(f"**Difficulty:** {problem['difficulty']}")
+with col1:
+    st.write(f"**Topic:** {problem['topic']}")
+
+with col2:
+    st.write(f"**Difficulty:** {problem['difficulty']}")
 
 st.divider()
 
@@ -60,41 +57,39 @@ response = code_editor(
     height=[20, 350],
 )
 
-user_code = response.get("text", ""))
+# Handle the case where the editor hasn't returned anything yet
+if response is None:
+    user_code = problem["starter_code"]
+else:
+    user_code = response.get("text", problem["starter_code"])
 
-c1, c2, c3 = st.columns(3)
+col1, col2, col3 = st.columns(3)
 
 # -----------------------------
 
-with c1:
+with col1:
 
     if st.button("✅ Submit"):
 
         if normalize_code(user_code) == normalize_code(problem["solution"]):
-
             st.success("Correct! 🎉")
-
         else:
-
             st.error("Incorrect ❌")
 
 # -----------------------------
 
-with c2:
+with col2:
 
     if st.button("💡 Hint"):
 
         if problem["hint"]:
-
             st.info(problem["hint"])
-
         else:
-
             st.warning("No hint available.")
 
 # -----------------------------
 
-with c3:
+with col3:
 
     if st.button("👀 Reveal Solution"):
 
