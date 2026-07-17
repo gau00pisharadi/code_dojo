@@ -189,3 +189,15 @@ def normalize_code(code):
         return ast.dump(ast.parse(code))
     except SyntaxError:
         return None
+
+def delete_problem(problem_id):
+
+    conn = get_connection()
+
+    conn.execute(
+        "DELETE FROM problems WHERE id=?",
+        (problem_id,)
+    )
+
+    conn.commit()
+    conn.close()
