@@ -27,3 +27,40 @@ Use the sidebar to:
 - 💻 Solve problems
 - ➕ Add new problems
 """)
+
+def update_problem(
+    problem_id,
+    title,
+    topic,
+    difficulty,
+    description,
+    starter_code,
+    solution,
+    hint
+):
+    conn = get_connection()
+
+    conn.execute("""
+        UPDATE problems
+        SET
+            title=?,
+            topic=?,
+            difficulty=?,
+            description=?,
+            starter_code=?,
+            solution=?,
+            hint=?
+        WHERE id=?
+    """, (
+        title,
+        topic,
+        difficulty,
+        description,
+        starter_code,
+        solution,
+        hint,
+        problem_id
+    ))
+
+    conn.commit()
+    conn.close()
