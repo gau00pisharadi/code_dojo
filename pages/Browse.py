@@ -2,7 +2,8 @@ import streamlit as st
 
 from database import (
     search_problems,
-    get_topics
+    get_topics,
+    delete_problem
 )
 
 st.set_page_config(page_title="Browse Problems", page_icon="📚")
