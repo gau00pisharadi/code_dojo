@@ -6,8 +6,8 @@ from database import (
 )
 
 st.set_page_config(
-    page_title="Add Problem",
-    page_icon="➕",
+    page_title="Edit Problem",
+    page_icon="✏",
     layout="wide"
 )
 
@@ -23,48 +23,47 @@ if problem is None:
     st.error("Problem not found.")
     st.stop()
 
-with st.form("add_problem_form"):
+with st.form("edit_problem_form"):
 
     title = st.text_input(
-    "Title",
-    value=problem["title"]
-)
+        "Title",
+        value=problem["title"]
+    )
 
     topic = st.text_input(
-    "Topic",
-    value=problem["topic"]
-)
-
-   difficulty = st.selectbox(
-    "Difficulty",
-    ["Easy", "Medium", "Hard"],
-    index=["Easy", "Medium", "Hard"].index(
-        problem["difficulty"]
+        "Topic",
+        value=problem["topic"]
     )
-)
+
+    difficulty = st.selectbox(
+        "Difficulty",
+        ["Easy", "Medium", "Hard"],
+        index=["Easy", "Medium", "Hard"].index(problem["difficulty"])
+    )
+
     description = st.text_area(
-    "Description",
-    value=problem["description"],
-    height=250
-)
+        "Description",
+        value=problem["description"],
+        height=250
+    )
 
     starter_code = st.text_area(
-    "Starter Code",
-    value=problem["starter_code"],
-    height=250
-)
+        "Starter Code",
+        value=problem["starter_code"],
+        height=250
+    )
 
     solution = st.text_area(
-    "Official Solution",
-    value=problem["solution"],
-    height=250
-)
+        "Official Solution",
+        value=problem["solution"],
+        height=250
+    )
 
     hint = st.text_area(
-    "Hint",
-    value=problem["hint"],
-    height=100
-)
+        "Hint",
+        value=problem["hint"],
+        height=100
+    )
 
     submitted = st.form_submit_button("💾 Save Problem")
 
@@ -82,15 +81,16 @@ if submitted:
     else:
 
         update_problem(
-         problem["id"],
-         title,
-          topic,
-         difficulty,
-          description,
-         starter_code,
-         solution,
-         hint
+            problem["id"],
+            title,
+            topic,
+            difficulty,
+            description,
+            starter_code,
+            solution,
+            hint
         )
+
         st.success("Problem updated successfully!")
 
         st.balloons()
