@@ -67,7 +67,7 @@ else:
 
             with c2:
 
-                solve_col, edit_col = st.columns(2)
+                solve_col, edit_col, delete_col = st.columns(3)
 
                 with solve_col:
 
@@ -94,5 +94,18 @@ else:
                         st.switch_page(
                             "pages/Edit_Problem.py"
                         )
+
+                with delete_col:
+
+                    if st.button(
+                        "Delete",
+                        key=f"delete_{problem['id']}"
+                    ):
+
+                        delete_problem(problem["id"])
+
+                        st.success("Problem deleted successfully!")
+
+                        st.rerun()
 
             st.divider()
