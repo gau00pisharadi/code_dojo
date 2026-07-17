@@ -41,6 +41,20 @@ def add_problem(
     conn = get_connection()
     cur = conn.cursor()
 
+    # Prevent duplicate imports
+    cur.execute(
+        """
+        SELECT id
+        FROM problems
+        WHERE title = ?
+        """,
+        (title,),
+    )
+
+    if cur.fetchone() is not None:
+        conn.close()
+        return False
+
     cur.execute(
         """
         INSERT INTO problems
@@ -68,6 +82,8 @@ def add_problem(
 
     conn.commit()
     conn.close()
+
+    return True
 
 
 def update_problem(
