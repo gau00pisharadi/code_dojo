@@ -50,7 +50,7 @@ else:
 
         with st.container():
 
-            c1, c2 = st.columns([5,1])
+            c1, c2 = st.columns([5, 2])
 
             with c1:
 
@@ -66,15 +66,32 @@ else:
 
             with c2:
 
-                if st.button(
-                    "Solve",
-                    key=f"solve_{problem['id']}"
-                ):
+                solve_col, edit_col = st.columns(2)
 
-                    st.session_state.problem_id = problem["id"]
+                with solve_col:
 
-                    st.switch_page(
-                        "pages/Solve.py"
-                    )
+                    if st.button(
+                        "Solve",
+                        key=f"solve_{problem['id']}"
+                    ):
+
+                        st.session_state.problem_id = problem["id"]
+
+                        st.switch_page(
+                            "pages/Solve.py"
+                        )
+
+                with edit_col:
+
+                    if st.button(
+                        "Edit",
+                        key=f"edit_{problem['id']}"
+                    ):
+
+                        st.session_state.problem_id = problem["id"]
+
+                        st.switch_page(
+                            "pages/Edit_Problem.py"
+                        )
 
             st.divider()
