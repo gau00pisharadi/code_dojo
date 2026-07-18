@@ -31,11 +31,43 @@ selected_difficulty = st.selectbox(
     ]
 )
 
+if "last_filters" not in st.session_state:
+    st.session_state.last_filters = None
+
+current_filters = (
+    search,
+    selected_topic,
+    selected_difficulty
+)
+
+if current_filters != st.session_state.last_filters:
+    st.session_state.page = 0
+    st.session_state.last_filters = current_filters
+
+# -----------------------------------
+
 problems = search_problems(
     search_text=search,
     topic=selected_topic,
     difficulty=selected_difficulty
 )
+
+problems = search_problems(
+    search_text=search,
+    topic=selected_topic,
+    difficulty=selected_difficulty
+)
+
+PAGE_SIZE = 20
+
+if "page" not in st.session_state:
+    st.session_state.page = 0
+
+start = st.session_state.page * PAGE_SIZE
+end = start + PAGE_SIZE
+
+displayed_problems = problems[start:end]
+
 
 st.write(f"### {len(problems)} problem(s) found")
 
@@ -47,7 +79,7 @@ if len(problems) == 0:
 
 else:
 
-    for problem in problems:
+    for problem in displayed_problems:
 
         with st.container():
 
@@ -111,3 +143,25 @@ else:
                         st.rerun()
 
             st.divider()
+
+prev_col, page_col, next_col = st.columns([1, 2, 1])
+
+with prev_col:
+    if st.button("⬅ Previous") and st.session_state.page > 0:
+        st.session_state.page -= 1
+        st.rerun()
+
+with page_col:
+    total_pages = (len(problems) - 1) // PAGE_SIZE + 1
+    st.markdown(
+        f"<div style='text-align:center;'>Page {st.session_state.page + 1} of {total_pages}</div>",
+        unsafe_allow_html=True,
+    )
+
+with next_col:
+    if (
+        st.button("Next ➡")
+        and end < len(problems)
+    ):
+        st.session_state.page += 1
+        st.rerun()
