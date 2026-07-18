@@ -96,6 +96,8 @@ with col1:
 
     if st.button("✅ Submit"):
 
+        st.write(response)
+        st.code(user_code)
         user_ast = normalize_code(user_code)
         solution_ast = normalize_code(problem["solution"])
 
