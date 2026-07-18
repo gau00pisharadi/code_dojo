@@ -55,7 +55,9 @@ else:
 
             with c1:
 
-                st.subheader(problem["title"])
+                status = "✅" if problem["solved"] else "⬜"
+
+                st.subheader(f"{status} {problem['title']}")
 
                 st.write(
                     f"**Topic:** {problem['topic']}"
