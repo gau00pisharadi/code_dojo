@@ -79,11 +79,14 @@ response = code_editor(
     height=[20, 350],
 )
 
-# Handle the case where the editor hasn't returned anything yet
-if response is None:
+if not response:
     user_code = problem["starter_code"]
 else:
-    user_code = response.get("text", problem["starter_code"])
+    user_code = (
+        response.get("text")
+        or response.get("code")
+        or problem["starter_code"]
+    )
 
 col1, col2, col3 = st.columns(3)
 
