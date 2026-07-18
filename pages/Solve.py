@@ -96,11 +96,17 @@ with col1:
 
     if st.button("✅ Submit"):
 
-        if normalize_code(user_code) == normalize_code(problem["solution"]):
+        user_ast = normalize_code(user_code)
+        solution_ast = normalize_code(problem["solution"])
+
+        if user_ast is None:
+            st.error("Your code contains a syntax error.")
+        elif solution_ast is None:
+            st.error("Official solution contains invalid Python.")
+        elif user_ast == solution_ast:
             st.success("Correct! 🎉")
         else:
             st.error("Incorrect ❌")
-
 # -----------------------------
 
 with col2:
