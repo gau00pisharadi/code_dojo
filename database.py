@@ -10,6 +10,7 @@ def get_connection():
 
 def create_tables():
     conn = get_connection()
+    conn.row_factory = sqlite3.Row
     cur = conn.cursor()
 
     cur.execute("""
@@ -22,16 +23,16 @@ def create_tables():
             starter_code TEXT,
             solution TEXT NOT NULL,
             hint TEXT,
-            solved INTEGER DEFAULT 0
+            solved INTEGER NOT NULL DEFAULT 0
         )
     """)
 
-    # Upgrade existing databases
-    columns = [row[1] for row in cur.execute("PRAGMA table_info(problems)")]
+    cur.execute("PRAGMA table_info(problems)")
+    columns = [row["name"] for row in cur.fetchall()]
 
     if "solved" not in columns:
         cur.execute(
-            "ALTER TABLE problems ADD COLUMN solved INTEGER DEFAULT 0"
+            "ALTER TABLE problems ADD COLUMN solved INTEGER NOT NULL DEFAULT 0"
         )
 
     conn.commit()
