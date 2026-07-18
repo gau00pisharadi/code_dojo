@@ -75,7 +75,7 @@ st.subheader("Your Solution")
 user_code = st_ace(
     value=problem["starter_code"],
     language="python",
-    theme="monokai",
+    theme="dracula",
     height=350,
     key=f"editor_{problem['id']}",
 )
