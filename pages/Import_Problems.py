@@ -50,6 +50,8 @@ except Exception as e:
     st.stop()
 
 if st.button("📥 Import Selected Pack"):
+    
+    clear_problems()
 
     imported = 0
 
