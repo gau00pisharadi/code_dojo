@@ -4,6 +4,7 @@ from code_editor import code_editor
 from database import (
     get_problem,
     normalize_code,
+    update_problem_status,
 )
 
 st.set_page_config(
@@ -29,8 +30,27 @@ if problem is None:
     st.stop()
 
 # -----------------------------
+# Problem Header + Solved Checkbox
+# -----------------------------
 
-st.header(problem["title"])
+title_col, solved_col = st.columns([8, 2])
+
+with title_col:
+    st.header(problem["title"])
+
+with solved_col:
+
+    solved = st.checkbox(
+        "Solved",
+        value=bool(problem["solved"]),
+        key=f"solved_{problem['id']}"
+    )
+
+    if solved != bool(problem["solved"]):
+        update_problem_status(problem["id"], solved)
+        st.rerun()
+
+# -----------------------------
 
 col1, col2 = st.columns(2)
 
