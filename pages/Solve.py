@@ -88,8 +88,7 @@ with col1:
 
     if st.button("✅ Submit"):
 
-        st.write(response)
-        st.code(user_code)
+
         if not user_code:
             
             st.error("Please write some code before submitting.")
