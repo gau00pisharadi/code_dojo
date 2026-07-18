@@ -21,9 +21,18 @@ def create_tables():
             description TEXT NOT NULL,
             starter_code TEXT,
             solution TEXT NOT NULL,
-            hint TEXT
+            hint TEXT,
+            solved INTEGER DEFAULT 0
         )
     """)
+
+    # Upgrade existing databases
+    columns = [row[1] for row in cur.execute("PRAGMA table_info(problems)")]
+
+    if "solved" not in columns:
+        cur.execute(
+            "ALTER TABLE problems ADD COLUMN solved INTEGER DEFAULT 0"
+        )
 
     conn.commit()
     conn.close()
@@ -122,6 +131,22 @@ def update_problem(
             hint,
             problem_id,
         ),
+    )
+
+    conn.commit()
+    conn.close()
+
+
+def update_problem_status(problem_id, solved):
+    conn = get_connection()
+
+    conn.execute(
+        """
+        UPDATE problems
+        SET solved=?
+        WHERE id=?
+        """,
+        (int(solved), problem_id),
     )
 
     conn.commit()
@@ -242,6 +267,22 @@ def get_counts():
     conn.close()
 
     return total, easy, medium, hard
+
+
+def get_solved_count():
+    conn = get_connection()
+
+    solved = conn.execute(
+        """
+        SELECT COUNT(*)
+        FROM problems
+        WHERE solved=1
+        """
+    ).fetchone()[0]
+
+    conn.close()
+
+    return solved
 
 
 def normalize_code(code):
