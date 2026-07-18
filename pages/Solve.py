@@ -72,21 +72,13 @@ st.divider()
 
 st.subheader("Your Solution")
 
-response = code_editor(
-    problem["starter_code"],
-    lang="python",
-    theme="default",
-    height=[20, 350],
+user_code = st_ace(
+    value=problem["starter_code"],
+    language="python",
+    theme="github",
+    height=350,
+    key=f"editor_{problem['id']}",
 )
-
-if not response:
-    user_code = problem["starter_code"]
-else:
-    user_code = (
-        response.get("text")
-        or response.get("code")
-        or problem["starter_code"]
-    )
 
 col1, col2, col3 = st.columns(3)
 
@@ -98,6 +90,10 @@ with col1:
 
         st.write(response)
         st.code(user_code)
+        if not user_code:
+            
+            st.error("Please write some code before submitting.")
+            st.stop()
         user_ast = normalize_code(user_code)
         solution_ast = normalize_code(problem["solution"])
 
