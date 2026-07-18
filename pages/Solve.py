@@ -1,5 +1,5 @@
 import streamlit as st
-from code_editor import code_editor
+from streamlit_ace import st_ace
 
 from database import (
     get_problem,
