@@ -295,3 +295,11 @@ def normalize_code(code):
         return ast.dump(ast.parse(code))
     except SyntaxError:
         return None
+
+def clear_problems():
+    conn = get_connection()
+
+    conn.execute("DELETE FROM problems")
+
+    conn.commit()
+    conn.close()
