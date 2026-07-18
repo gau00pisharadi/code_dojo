@@ -42,11 +42,13 @@ with solved_col:
 
     solved = st.checkbox(
         "Solved",
-        value=bool(problem["solved"]),
+        value=bool(problem["solved"]) if "solved" in problem.keys() else False,
         key=f"solved_{problem['id']}"
     )
 
-    if solved != bool(problem["solved"]):
+    current_status = bool(problem["solved"]) if "solved" in problem.keys() else False
+
+    if solved != current_status:
         update_problem_status(problem["id"], solved)
         st.rerun()
 
