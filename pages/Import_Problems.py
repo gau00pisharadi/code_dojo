@@ -3,7 +3,7 @@ import os
 import pandas as pd
 import streamlit as st
 
-from database import add_problem
+from database import add_problem, clear_problems
 
 st.set_page_config(
     page_title="Import Problems",
