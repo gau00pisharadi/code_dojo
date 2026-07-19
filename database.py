@@ -51,7 +51,7 @@ def add_problem(
     conn = get_connection()
     cur = conn.cursor()
 
-    # Prevent duplicate imports
+    # Check if the problem already exists
     cur.execute(
         """
         SELECT id
@@ -61,34 +61,59 @@ def add_problem(
         (title,),
     )
 
-    if cur.fetchone() is not None:
-        conn.close()
-        return False
+    existing = cur.fetchone()
 
-    cur.execute(
-        """
-        INSERT INTO problems
-        (
-            title,
-            topic,
-            difficulty,
-            description,
-            starter_code,
-            solution,
-            hint
+    if existing:
+        # Update the problem, but KEEP the solved status
+        cur.execute(
+            """
+            UPDATE problems
+            SET
+                topic=?,
+                difficulty=?,
+                description=?,
+                starter_code=?,
+                solution=?,
+                hint=?
+            WHERE title=?
+            """,
+            (
+                topic,
+                difficulty,
+                description,
+                starter_code,
+                solution,
+                hint,
+                title,
+            ),
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-        """,
-        (
-            title,
-            topic,
-            difficulty,
-            description,
-            starter_code,
-            solution,
-            hint,
-        ),
-    )
+    else:
+        # Insert a brand new problem
+        cur.execute(
+            """
+            INSERT INTO problems
+            (
+                title,
+                topic,
+                difficulty,
+                description,
+                starter_code,
+                solution,
+                hint,
+                solved
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, 0)
+            """,
+            (
+                title,
+                topic,
+               difficulty,
+                description,
+                starter_code,
+                solution,
+                hint,
+            ),
+        )
 
     conn.commit()
     conn.close()
