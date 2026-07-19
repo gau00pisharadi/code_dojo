@@ -51,7 +51,7 @@ except Exception as e:
 
 if st.button("📥 Import Selected Pack"):
     
-    clear_problems()
+    #clear_problems()
 
     imported = 0
 
