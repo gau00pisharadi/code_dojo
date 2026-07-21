@@ -39,6 +39,7 @@ file_path = os.path.join(PACKS_FOLDER, selected_pack)
 try:
     df = pd.read_csv(file_path)
     df = df.fillna("")
+    st.write(df.columns.tolist())
 
     st.success(f"{len(df)} problems found.")
 
