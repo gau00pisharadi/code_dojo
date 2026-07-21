@@ -44,7 +44,7 @@ try:
     st.success(f"{len(df)} problems found.")
 
     st.dataframe(
-        df[["title", "topic", "difficulty"]],
+        df,
         use_container_width=True
     )
 
