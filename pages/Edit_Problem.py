@@ -1,4 +1,3 @@
-
 import streamlit as st
 
 from database import (
@@ -66,6 +65,11 @@ with st.form("edit_problem_form"):
         height=100
     )
 
+    pack = st.text_input(
+        "Problem Pack",
+        value=problem["pack"] if problem["pack"] else ""
+    )
+
     submitted = st.form_submit_button("💾 Save Problem")
 
 if submitted:
@@ -89,9 +93,9 @@ if submitted:
             description,
             starter_code,
             solution,
-            hint
+            hint,
+            pack
         )
 
         st.success("Problem updated successfully!")
-
         st.balloons()
