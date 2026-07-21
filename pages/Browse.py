@@ -1,18 +1,32 @@
-
 import streamlit as st
 
 from database import (
     search_problems,
     get_topics,
-    delete_problem
+    get_packs,
+    delete_problem,
 )
 
-st.set_page_config(page_title="Browse Problems", page_icon="📚")
+st.set_page_config(
+    page_title="Browse Problems",
+    page_icon="📚"
+)
 
 st.title("📚 Browse Problems")
 
+# ----------------------------
+# Filters
+# ----------------------------
+
 search = st.text_input(
     "Search by title"
+)
+
+packs = ["All"] + get_packs()
+
+selected_pack = st.selectbox(
+    "Problem Pack",
+    packs
 )
 
 topics = ["All"] + get_topics()
@@ -28,36 +42,40 @@ selected_difficulty = st.selectbox(
         "All",
         "Easy",
         "Medium",
-        "Hard"
-    ]
+        "Hard",
+    ],
 )
+
+# ----------------------------
 
 if "last_filters" not in st.session_state:
     st.session_state.last_filters = None
 
 current_filters = (
     search,
+    selected_pack,
     selected_topic,
-    selected_difficulty
+    selected_difficulty,
 )
 
 if current_filters != st.session_state.last_filters:
     st.session_state.page = 0
     st.session_state.last_filters = current_filters
 
-# -----------------------------------
+# ----------------------------
+# Search
+# ----------------------------
 
 problems = search_problems(
     search_text=search,
+    pack=selected_pack,
     topic=selected_topic,
-    difficulty=selected_difficulty
+    difficulty=selected_difficulty,
 )
 
-problems = search_problems(
-    search_text=search,
-    topic=selected_topic,
-    difficulty=selected_difficulty
-)
+# ----------------------------
+# Pagination
+# ----------------------------
 
 PAGE_SIZE = 20
 
@@ -69,6 +87,7 @@ end = start + PAGE_SIZE
 
 displayed_problems = problems[start:end]
 
+# ----------------------------
 
 st.write(f"### {len(problems)} problem(s) found")
 
@@ -92,13 +111,9 @@ else:
 
                 st.subheader(f"{status} {problem['title']}")
 
-                st.write(
-                    f"**Topic:** {problem['topic']}"
-                )
-
-                st.write(
-                    f"**Difficulty:** {problem['difficulty']}"
-                )
+                st.write(f"**Pack:** {problem['pack']}")
+                st.write(f"**Topic:** {problem['topic']}")
+                st.write(f"**Difficulty:** {problem['difficulty']}")
 
             with c2:
 
@@ -145,21 +160,29 @@ else:
 
             st.divider()
 
+# ----------------------------
+# Pagination Controls
+# ----------------------------
+
 prev_col, page_col, next_col = st.columns([1, 2, 1])
 
 with prev_col:
+
     if st.button("⬅ Previous") and st.session_state.page > 0:
         st.session_state.page -= 1
         st.rerun()
 
 with page_col:
-    total_pages = (len(problems) - 1) // PAGE_SIZE + 1
+
+    total_pages = max(1, (len(problems) - 1) // PAGE_SIZE + 1)
+
     st.markdown(
         f"<div style='text-align:center;'>Page {st.session_state.page + 1} of {total_pages}</div>",
         unsafe_allow_html=True,
     )
 
 with next_col:
+
     if (
         st.button("Next ➡")
         and end < len(problems)
