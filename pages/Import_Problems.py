@@ -1,4 +1,3 @@
-
 import os
 
 import pandas as pd
@@ -15,12 +14,10 @@ st.title("📥 Import Problem Packs")
 
 PACKS_FOLDER = "problem_packs"
 
-# Check folder exists
 if not os.path.exists(PACKS_FOLDER):
     st.error("problem_packs folder not found.")
     st.stop()
 
-# Find all CSV files
 csv_files = sorted(
     [f for f in os.listdir(PACKS_FOLDER) if f.endswith(".csv")]
 )
@@ -34,27 +31,31 @@ selected_pack = st.selectbox(
     csv_files
 )
 
+pack = os.path.splitext(selected_pack)[0]
+
 file_path = os.path.join(PACKS_FOLDER, selected_pack)
 
 try:
     df = pd.read_csv(file_path)
     df = df.fillna("")
-    st.write(df.columns.tolist())
 
     st.success(f"{len(df)} problems found.")
 
-    st.dataframe(
-        df,
-        use_container_width=True
-    )
+    with st.expander("Preview"):
+        st.write(df.columns.tolist())
+        st.dataframe(
+            df,
+            use_container_width=True
+        )
 
 except Exception as e:
     st.error(f"Unable to read CSV.\n\n{e}")
     st.stop()
 
 if st.button("📥 Import Selected Pack"):
-    
-    #clear_problems()
+
+    # Uncomment to wipe the database before importing
+    # clear_problems()
 
     imported = 0
 
@@ -67,9 +68,12 @@ if st.button("📥 Import Selected Pack"):
             row["description"],
             row["starter_code"],
             row["solution"],
-            row["hint"]
+            row["hint"],
+            pack,
         )
 
         imported += 1
 
-    st.success(f"Imported {imported} problems from {selected_pack}")
+    st.success(
+        f"Imported {imported} problems from '{pack}'."
+    )
