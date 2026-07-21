@@ -1,3 +1,6 @@
+from database import create_tables
+
+create_tables()
 import streamlit as st
 
 from database import add_problem
