@@ -1,3 +1,10 @@
+# Updated database.py with Problem Pack support.
+# This file adds:
+# - pack column
+# - get_packs()
+# - pack filtering in search_problems()
+# - add/update support for pack
+
 import sqlite3
 import ast
 
@@ -12,337 +19,169 @@ def get_connection():
 
 def create_tables():
     conn = get_connection()
-
     try:
         cur = conn.cursor()
 
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS problems (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                title TEXT NOT NULL,
-                topic TEXT NOT NULL,
-                difficulty TEXT NOT NULL,
-                description TEXT NOT NULL,
-                starter_code TEXT,
-                solution TEXT NOT NULL,
-                hint TEXT,
-                solved INTEGER NOT NULL DEFAULT 0
-            )
-        """)
+        cur.execute('''
+        CREATE TABLE IF NOT EXISTS problems(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            topic TEXT NOT NULL,
+            difficulty TEXT NOT NULL,
+            description TEXT NOT NULL,
+            starter_code TEXT,
+            solution TEXT NOT NULL,
+            hint TEXT,
+            pack TEXT,
+            solved INTEGER NOT NULL DEFAULT 0
+        )
+        ''')
 
         cur.execute("PRAGMA table_info(problems)")
-        columns = [row["name"] for row in cur.fetchall()]
-
-        if "solved" not in columns:
-            cur.execute(
-                "ALTER TABLE problems ADD COLUMN solved INTEGER NOT NULL DEFAULT 0"
-            )
-
+        cols=[r["name"] for r in cur.fetchall()]
+        if "solved" not in cols:
+            cur.execute("ALTER TABLE problems ADD COLUMN solved INTEGER NOT NULL DEFAULT 0")
+        if "pack" not in cols:
+            cur.execute("ALTER TABLE problems ADD COLUMN pack TEXT")
         conn.commit()
-
     finally:
         conn.close()
 
 
-def add_problem(
-    title,
-    topic,
-    difficulty,
-    description,
-    starter_code,
-    solution,
-    hint,
-):
-    conn = get_connection()
-
+def add_problem(title,topic,difficulty,description,starter_code,solution,hint,pack):
+    conn=get_connection()
     try:
-        cur = conn.cursor()
-
-        cur.execute(
-            """
-            SELECT id
-            FROM problems
-            WHERE title=?
-            """,
-            (title,),
-        )
-
-        existing = cur.fetchone()
-
-        if existing:
-            cur.execute(
-                """
-                UPDATE problems
-                SET
-                    topic=?,
-                    difficulty=?,
-                    description=?,
-                    starter_code=?,
-                    solution=?,
-                    hint=?
-                WHERE title=?
-                """,
-                (
-                    topic,
-                    difficulty,
-                    description,
-                    starter_code,
-                    solution,
-                    hint,
-                    title,
-                ),
-            )
-
+        cur=conn.cursor()
+        cur.execute("SELECT id FROM problems WHERE title=?",(title,))
+        if cur.fetchone():
+            cur.execute('''UPDATE problems SET
+                topic=?,difficulty=?,description=?,starter_code=?,
+                solution=?,hint=?,pack=? WHERE title=?''',
+                (topic,difficulty,description,starter_code,solution,hint,pack,title))
         else:
-            cur.execute(
-                """
-                INSERT INTO problems
-                (
-                    title,
-                    topic,
-                    difficulty,
-                    description,
-                    starter_code,
-                    solution,
-                    hint,
-                    solved
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?, 0)
-                """,
-                (
-                    title,
-                    topic,
-                    difficulty,
-                    description,
-                    starter_code,
-                    solution,
-                    hint,
-                ),
-            )
-
+            cur.execute('''INSERT INTO problems
+            (title,topic,difficulty,description,starter_code,solution,hint,pack,solved)
+            VALUES (?,?,?,?,?,?,?,?,0)''',
+            (title,topic,difficulty,description,starter_code,solution,hint,pack))
         conn.commit()
-
-    finally:
-        conn.close()
-
-    return True
-
-
-def update_problem(
-    problem_id,
-    title,
-    topic,
-    difficulty,
-    description,
-    starter_code,
-    solution,
-    hint,
-):
-    conn = get_connection()
-
-    try:
-        conn.execute(
-            """
-            UPDATE problems
-            SET
-                title=?,
-                topic=?,
-                difficulty=?,
-                description=?,
-                starter_code=?,
-                solution=?,
-                hint=?
-            WHERE id=?
-            """,
-            (
-                title,
-                topic,
-                difficulty,
-                description,
-                starter_code,
-                solution,
-                hint,
-                problem_id,
-            ),
-        )
-
-        conn.commit()
-
     finally:
         conn.close()
 
 
-def update_problem_status(problem_id, solved):
-    conn = get_connection()
-
+def update_problem(problem_id,title,topic,difficulty,description,starter_code,solution,hint,pack):
+    conn=get_connection()
     try:
-        conn.execute(
-            """
-            UPDATE problems
-            SET solved=?
-            WHERE id=?
-            """,
-            (int(solved), problem_id),
-        )
-
+        conn.execute('''UPDATE problems SET
+        title=?,topic=?,difficulty=?,description=?,starter_code=?,solution=?,hint=?,pack=?
+        WHERE id=?''',
+        (title,topic,difficulty,description,starter_code,solution,hint,pack,problem_id))
         conn.commit()
+    finally:
+        conn.close()
 
+
+def update_problem_status(problem_id,solved):
+    conn=get_connection()
+    try:
+        conn.execute("UPDATE problems SET solved=? WHERE id=?",(int(solved),problem_id))
+        conn.commit()
     finally:
         conn.close()
 
 
 def delete_problem(problem_id):
-    conn = get_connection()
-
+    conn=get_connection()
     try:
-        conn.execute(
-            "DELETE FROM problems WHERE id=?",
-            (problem_id,),
-        )
-
+        conn.execute("DELETE FROM problems WHERE id=?",(problem_id,))
         conn.commit()
-
     finally:
         conn.close()
 
 
 def clear_problems():
-    conn = get_connection()
-
+    conn=get_connection()
     try:
         conn.execute("DELETE FROM problems")
         conn.commit()
-
     finally:
         conn.close()
 
 
 def get_all_problems():
-    conn = get_connection()
-
+    conn=get_connection()
     try:
-        return conn.execute(
-            """
-            SELECT *
-            FROM problems
-            ORDER BY id
-            """
-        ).fetchall()
-
+        return conn.execute("SELECT * FROM problems ORDER BY id").fetchall()
     finally:
         conn.close()
 
 
 def get_problem(problem_id):
-    conn = get_connection()
-
+    conn=get_connection()
     try:
-        return conn.execute(
-            """
-            SELECT *
-            FROM problems
-            WHERE id=?
-            """,
-            (problem_id,),
-        ).fetchone()
-
+        return conn.execute("SELECT * FROM problems WHERE id=?",(problem_id,)).fetchone()
     finally:
         conn.close()
 
 
-def search_problems(search_text="", topic="All", difficulty="All"):
-    conn = get_connection()
-
+def search_problems(search_text="",pack="All",topic="All",difficulty="All"):
+    conn=get_connection()
     try:
-        query = """
-            SELECT *
-            FROM problems
-            WHERE title LIKE ?
-        """
-
-        params = [f"%{search_text}%"]
-
-        if topic != "All":
-            query += " AND topic=?"
+        query="SELECT * FROM problems WHERE title LIKE ?"
+        params=[f"%{search_text}%"]
+        if pack!="All":
+            query+=" AND pack=?"
+            params.append(pack)
+        if topic!="All":
+            query+=" AND topic=?"
             params.append(topic)
-
-        if difficulty != "All":
-            query += " AND difficulty=?"
+        if difficulty!="All":
+            query+=" AND difficulty=?"
             params.append(difficulty)
-
-        query += " ORDER BY id"
-
-        return conn.execute(query, params).fetchall()
-
+        query+=" ORDER BY id"
+        return conn.execute(query,params).fetchall()
     finally:
         conn.close()
 
 
 def get_topics():
-    conn = get_connection()
-
+    conn=get_connection()
     try:
-        rows = conn.execute(
-            """
-            SELECT DISTINCT topic
-            FROM problems
-            ORDER BY topic
-            """
-        ).fetchall()
+        rows=conn.execute("SELECT DISTINCT topic FROM problems ORDER BY topic").fetchall()
+        return [r["topic"] for r in rows]
+    finally:
+        conn.close()
 
-        return [row["topic"] for row in rows]
 
+def get_packs():
+    conn=get_connection()
+    try:
+        rows=conn.execute("SELECT DISTINCT pack FROM problems WHERE pack IS NOT NULL ORDER BY pack").fetchall()
+        return [r["pack"] for r in rows]
     finally:
         conn.close()
 
 
 def get_counts():
-    conn = get_connection()
-
+    conn=get_connection()
     try:
-        total = conn.execute(
-            "SELECT COUNT(*) FROM problems"
-        ).fetchone()[0]
-
-        easy = conn.execute(
-            "SELECT COUNT(*) FROM problems WHERE difficulty='Easy'"
-        ).fetchone()[0]
-
-        medium = conn.execute(
-            "SELECT COUNT(*) FROM problems WHERE difficulty='Medium'"
-        ).fetchone()[0]
-
-        hard = conn.execute(
-            "SELECT COUNT(*) FROM problems WHERE difficulty='Hard'"
-        ).fetchone()[0]
-
-        return total, easy, medium, hard
-
+        total=conn.execute("SELECT COUNT(*) FROM problems").fetchone()[0]
+        easy=conn.execute("SELECT COUNT(*) FROM problems WHERE difficulty='Easy'").fetchone()[0]
+        medium=conn.execute("SELECT COUNT(*) FROM problems WHERE difficulty='Medium'").fetchone()[0]
+        hard=conn.execute("SELECT COUNT(*) FROM problems WHERE difficulty='Hard'").fetchone()[0]
+        return total,easy,medium,hard
     finally:
         conn.close()
 
 
 def get_solved_count():
-    conn = get_connection()
-
+    conn=get_connection()
     try:
-        return conn.execute(
-            """
-            SELECT COUNT(*)
-            FROM problems
-            WHERE solved=1
-            """
-        ).fetchone()[0]
-
+        return conn.execute("SELECT COUNT(*) FROM problems WHERE solved=1").fetchone()[0]
     finally:
         conn.close()
 
 
 def normalize_code(code):
-    """
-    Compare code using Python's AST so formatting differences
-    (spacing, blank lines, etc.) are ignored.
-    """
     try:
         return ast.dump(ast.parse(code))
     except SyntaxError:
